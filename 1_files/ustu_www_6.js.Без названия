@@ -1,0 +1,129 @@
+(function ($) {
+
+Drupal.behaviors.studprogress = {
+  attach: function() {
+    $('#studprogress').submit(function(e){
+      e.preventDefault();
+      $('.ProgressDetails').html("<table style='border:none;' width=100%><tr><td align='center'><img src='//www.ugtu.net/sites/all/themes/ustu_www_6/images/load.gif'></td></tr><tr><td align='center'>загрузка данных...</td></tr></table>");
+      var getstr = "/__scripts/getProgress.php?";
+      getstr += "sid=";
+      getstr += $('#sid').val();
+      getstr += "&passp=";
+      getstr += $('#passp').val();
+      $('.ProgressDetails').load(getstr);
+    });
+
+    $('.ProgressDetails ul.tabs li').click(function(e){
+        e.preventDefault();
+        $(this).addclass('current');
+        var p = $(this).parents('div.progress');
+        p.find('div.box').hide();
+        p.find('div.box:eq('+i+')').fadeIn(150);
+    });
+  }
+};
+
+function getSpecialCookie() {
+  var s = ( $.cookie('special') == null ) ? $.cookie('special', '1', { path: '/' }) : $.cookie('special');
+  var sf = ( $.cookie('special-font') == null ) ? $.cookie('special-font', 's', { path: '/' }) : $.cookie('special-font');
+  var sm = ( $.cookie('special-mode') == null ) ? $.cookie('special-mode', 'bw', { path: '/' }) : $.cookie('special-mode');
+  
+  console.log(s, sf, sm);
+
+  return 'special ' + 'special-f-' + sf + ' ' + 'special-m-' + sm;
+}
+
+function removeSpecialCookie() {
+  $.cookie('special', null, { path: '/' });
+}
+
+function setSpecial() {
+  var sc = getSpecialCookie();
+  $('body').addClass(sc);
+
+  if ( $.cookie('special-mode') == 'bw') {
+    $('#logo img').attr('src', '/logo-black.png');
+  } else if ( $.cookie('special-mode') == 'inv' ) {
+    $('#logo img').attr('src', '/logo-white.png');
+  } else {
+    $('#logo img').attr('src', '/logo.png');
+  }
+};
+
+
+Drupal.behaviors.special = {
+  attach: function() {
+    if ( $.cookie('special') == 1 ) {
+      setSpecial();
+    }
+
+    $('.special-on').on('click', function(e) {
+      e.preventDefault();
+      setSpecial();      
+    });
+
+    $('.special-off').on('click', function(e) {
+      e.preventDefault();
+      $('body').removeClass('special-f-s special-f-m special-f-l');
+      $('body').removeClass('special-m-bw special-m-inv special-m-n');
+      $('body').removeClass('special');
+      $('#logo img').attr('src', '/logo.png');
+      removeSpecialCookie();
+    });
+  }
+};
+
+Drupal.behaviors.special_font = {
+  attach: function() {
+    $('#special-bar div.special-font-s').on('click', function(e) {
+        e.preventDefault();
+        $('body').removeClass('special-f-s special-f-m special-f-l');
+        $('body').addClass('special-f-s');
+        $.cookie('special-font', 's', { path: '/' })
+    });
+
+    $('#special-bar div.special-font-m').on('click', function(e) {
+        e.preventDefault();
+        $('body').removeClass('special-f-s special-f-m special-f-l');
+        $('body').addClass('special-f-m');
+        $.cookie('special-font', 'm', { path: '/' });
+    });
+
+    $('#special-bar div.special-font-l').on('click', function(e) {
+        e.preventDefault();
+        $('body').removeClass('special-f-s special-f-m special-f-l');
+        $('body').addClass('special-f-l');
+        $.cookie('special-font', 'l', { path: '/' });
+    });
+  }
+};
+
+Drupal.behaviors.special_mode = {
+  attach: function() {
+    $('#special-bar div.special-mode-bw').on('click', function(e) {
+        e.preventDefault();
+        $('body').removeClass('special-m-bw special-m-inv special-m-n');
+        $('body').addClass('special-m-bw');
+        $.cookie('special-mode', 'bw', { path: '/' });
+        $('#logo img').attr('src', '/logo-black.png');
+    });
+
+    $('#special-bar div.special-mode-inv').on('click', function(e) {
+        e.preventDefault();
+        $('body').removeClass('special-m-bw special-m-inv special-m-n');
+        $('body').addClass('special-m-inv');
+        $.cookie('special-mode', 'inv', { path: '/' });
+        $('#logo img').attr('src', '/logo-white.png');
+    });
+
+    $('#special-bar div.special-mode-n').on('click', function(e) {
+        e.preventDefault();
+        $('body').removeClass('special-m-bw special-m-inv special-m-n');
+        $('body').addClass('special-m-n');
+        $.cookie('special-mode', 'n', { path: '/' });
+        $('#logo img').attr('src', '/logo.png');
+    });
+  }
+};
+
+})(jQuery);

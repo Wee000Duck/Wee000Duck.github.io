@@ -1,0 +1,19 @@
+(function($){
+
+  Drupal.behaviors.ustu_spoiler = {
+    attach: function() {
+      $('.s-content.hidden').fadeOut();
+      // $('.s-control .hide').hide()
+      $('.s-control .show').click(function(){
+        $(this)
+        .parent()
+        .siblings('.s-content')
+        .fadeToggle();
+        // $(this).hide()
+        // .siblings('div')
+        // .show();
+        $(this).toggleClass('hide');
+      });
+    }
+  };
+})(jQuery);
